@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   View,
   PressableProps,
+  ViewStyle,
 } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { COLORS } from "../../constant/colors";
@@ -16,6 +17,7 @@ type BtnProps = {
   loading?: boolean;
   disabled?: boolean;
   testID?: string;
+  width?: number | string;
 } & PressableProps;
 
 const Btn = ({
@@ -24,13 +26,21 @@ const Btn = ({
   loading = false,
   disabled = false,
   testID,
+  width,
   ...rest
 }: BtnProps) => {
   const isDisabled = disabled || loading;
 
+  // Determine the width style
+  const widthStyle: ViewStyle = width
+    ? typeof width === "number"
+      ? { width }
+      : { width }
+    : { width: wp("100%") };
+
   return (
     <Pressable
-      style={styles.container}
+      style={[styles.container, widthStyle]}
       onPress={onPress}
       disabled={isDisabled}
       accessibilityRole="button"
@@ -56,13 +66,12 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 20,
-    width: wp("100%"),
     alignItems: "center",
   },
   content: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8, // clean spacing between spinner & text
+    gap: 8,
   },
   label: {
     color: COLORS.white,
